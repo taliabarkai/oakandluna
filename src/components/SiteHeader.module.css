@@ -14,19 +14,22 @@
 
 .headerFixed {
   position: fixed;
-  top: var(--topline-height, 40px);
+  top: var(--header-fixed-top, var(--announcement-bar-height, 40px));
   left: 0;
   right: 0;
   z-index: 100;
-  max-width: none;
   width: 100%;
+  max-width: none;
   margin: 0;
 }
 
-.headerStatic {
-  position: sticky;
-  top: var(--topline-height, 40px);
-  z-index: 100;
+.headerInNavStack {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  align-self: stretch;
 }
 
 .headerSolid {
@@ -64,7 +67,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 

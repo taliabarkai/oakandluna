@@ -1,7 +1,10 @@
-.bar {
-  position: sticky;
-  top: 0;
-  z-index: 101;
+/* Announcement only (promo lives in App sticky stack off home); scrolls with page */
+.announcementShell {
+  width: 100%;
+  background-color: #000000;
+}
+
+.announcementBtn {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,10 +12,27 @@
   max-width: 1920px;
   margin: 0 auto;
   padding: 8px 32px;
-  background: #1f1f1f;
-  color: #fff;
   min-height: 40px;
   box-sizing: border-box;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.announcementBtn:hover {
+  opacity: 0.92;
+}
+
+.announcementBtn:focus {
+  outline: none;
+}
+
+.announcementBtn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
 }
 
 .left,
@@ -63,9 +83,42 @@
   white-space: nowrap;
 }
 
-/* Mobile: single announcement line (matches comp) */
+/* Green promo topline (THEMES 9604:82037); parent App.stickyNavStack is sticky on PLP */
+.promoRoot {
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.promoBanner {
+  width: 100%;
+  background-color: #adfc73;
+  box-sizing: border-box;
+}
+
+.promoInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.promoText {
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.4px;
+  color: #000000;
+}
+
 @media (max-width: 767px) {
-  .bar {
+  .announcementBtn {
     justify-content: center;
     padding: 10px 16px;
     min-height: 36px;
@@ -84,5 +137,13 @@
     text-transform: uppercase;
     font-size: 13px;
     letter-spacing: 0.35px;
+  }
+
+  .promoInner {
+    padding: 14px 16px;
+  }
+
+  .promoText {
+    white-space: normal;
   }
 }

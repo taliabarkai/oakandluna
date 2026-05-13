@@ -3,15 +3,42 @@
   background: #fff;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 }
 
-.mainDefault,
-.mainHome {
+/* Home: green topline sticks to viewport top once announcement has scrolled past */
+.promoStickyHome {
+  position: sticky;
+  top: 0;
+  z-index: 101;
+  width: 100%;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+
+/* PLP: promo + header stick as one block under scrolling announcement (THEMES) */
+.stickyNavStack {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+
+.mainDefault {
   flex: 1;
   width: 100%;
   min-width: 0;
 }
 
+/* Home: only the hero — do not flex-grow or a white band appears above the footer */
 .mainHome {
+  flex: 0 1 auto;
+  width: 100%;
+  min-width: 0;
   padding: 0;
 }

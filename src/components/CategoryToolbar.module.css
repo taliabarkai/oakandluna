@@ -1,6 +1,6 @@
 .bar {
   position: sticky;
-  top: calc(var(--topline-height, 40px) + var(--site-header-sticky-height, 69px));
+  top: var(--sticky-nav-stack-height, 69px);
   z-index: 99;
   display: flex;
   align-items: center;

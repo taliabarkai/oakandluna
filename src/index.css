@@ -11,7 +11,10 @@ body {
 }
 
 :root {
-  --topline-height: 40px;
+  /* Black announcement row height (not sticky); matches Topline.module.css min-heights */
+  --announcement-bar-height: 40px;
+  /* Measured height of PLP sticky block (promo + header); set in App.tsx */
+  --sticky-nav-stack-height: 69px;
   --header-clearance: 56px;
   /* Sticky toolbar on PLP: sits below Topline + SiteHeader (see SiteHeader.module.css breakpoints) */
   --site-header-sticky-height: 69px;
@@ -25,6 +28,7 @@ body {
 
 @media (max-width: 767px) {
   :root {
+    --announcement-bar-height: 36px;
     --site-header-sticky-height: 56px;
   }
 }

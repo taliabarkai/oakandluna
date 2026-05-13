@@ -5,14 +5,15 @@
   background: #e8e8e8;
 }
 
-.heroLink {
+.heroCard {
+  position: relative;
   display: block;
   width: 100%;
   color: inherit;
   text-decoration: none;
 }
 
-.heroLink:focus-visible {
+.heroCard:focus-visible {
   outline: 2px solid #1f1f1f;
   outline-offset: 2px;
 }
@@ -28,4 +29,57 @@
   max-width: 100%;
   height: auto;
   display: block;
+  vertical-align: top;
+}
+
+/* Live type over hero (THEMES hero — image may be text-free) */
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 24px 20px 32px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.heroHeadline {
+  margin: 0;
+  max-width: 18ch;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(48px, 11vw, 80px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0;
+  font-feature-settings: "lnum", "pnum";
+  color: #000;
+  text-align: left;
+}
+
+.heroCta {
+  display: inline-block;
+  margin-top: 16px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #000;
+  font-family: "Akatab", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #000;
+  pointer-events: none;
+}
+
+@media (min-width: 901px) {
+  .heroOverlay {
+    justify-content: center;
+    padding: 32px 40px;
+  }
+
+  .heroHeadline {
+    max-width: 16ch;
+  }
 }

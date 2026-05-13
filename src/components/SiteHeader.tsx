@@ -46,7 +46,7 @@ export function SiteHeader() {
 
   const headerClass = [
     styles.header,
-    isHome ? styles.headerFixed : styles.headerStatic,
+    isHome ? styles.headerFixed : styles.headerInNavStack,
     solid ? styles.headerSolid : isHome ? styles.headerTransparent : styles.headerSolid,
   ].join(" ");
 
