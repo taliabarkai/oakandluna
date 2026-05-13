@@ -93,8 +93,11 @@
 
 @media (max-width: 960px) {
   .heroGrid,
-  .splitHero {
+  .splitHero,
+  .row4 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* Match row/column spacing (splitHero was 8px; hero/row4 were 8px / 4px). */
+    gap: 4px;
   }
 
   .heroFeatured {

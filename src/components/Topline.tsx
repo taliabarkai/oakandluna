@@ -30,15 +30,23 @@ export function Topline({ promoOpen, onPromoOpenChange }: ToplineProps) {
     };
 
     syncHeaderTop();
-    const ro = new ResizeObserver(syncHeaderTop);
-    if (announcementRef.current) ro.observe(announcementRef.current);
-    const promoEl = document.getElementById(PROMO_BANNER_ID);
-    if (promoEl) ro.observe(promoEl);
     window.addEventListener("scroll", syncHeaderTop, { passive: true });
     window.addEventListener("resize", syncHeaderTop);
 
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      try {
+        ro = new ResizeObserver(syncHeaderTop);
+        if (announcementRef.current) ro.observe(announcementRef.current);
+        const promoEl = document.getElementById(PROMO_BANNER_ID);
+        if (promoEl) ro.observe(promoEl);
+      } catch {
+        ro = null;
+      }
+    }
+
     return () => {
-      ro.disconnect();
+      ro?.disconnect();
       window.removeEventListener("scroll", syncHeaderTop);
       window.removeEventListener("resize", syncHeaderTop);
       document.documentElement.style.removeProperty("--header-fixed-top");

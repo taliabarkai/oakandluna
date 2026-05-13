@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Topline } from "@/components/Topline";
 import { ToplinePromoBanner } from "@/components/ToplinePromoBanner";
+import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import styles from "./AppChrome.module.css";
 
 export function AppChrome({ children }: { children: ReactNode }) {
@@ -33,12 +34,20 @@ export function AppChrome({ children }: { children: ReactNode }) {
     };
 
     sync();
-    const ro = new ResizeObserver(sync);
-    ro.observe(el);
     window.addEventListener("resize", sync);
 
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      try {
+        ro = new ResizeObserver(sync);
+        ro.observe(el);
+      } catch {
+        ro = null;
+      }
+    }
+
     return () => {
-      ro.disconnect();
+      ro?.disconnect();
       window.removeEventListener("resize", sync);
       root.style.removeProperty("--sticky-nav-stack-height");
     };
@@ -62,7 +71,9 @@ export function AppChrome({ children }: { children: ReactNode }) {
           <SiteHeader />
         </div>
       )}
-      <main className={isHome ? styles.mainHome : styles.mainDefault}>{children}</main>
+      <main className={isHome ? styles.mainHome : styles.mainDefault}>
+        <RouteErrorBoundary>{children}</RouteErrorBoundary>
+      </main>
       <SiteFooter />
     </div>
   );
