@@ -6,13 +6,7 @@ export function CategoryPageView() {
     <>
       <CategoryBanner
         title="NECKLACES FOR WOMEN"
-        description={
-          <>
-            Capture your unique personality effortlessly with pendants
-            <br aria-hidden="true" />
-            for women, as your jewelry should be just as unique as you are.
-          </>
-        }
+        description="Capture your unique personality effortlessly with pendants for women, as your jewelry should be just as unique as you are."
       />
       <CategoryPageLayout />
     </>

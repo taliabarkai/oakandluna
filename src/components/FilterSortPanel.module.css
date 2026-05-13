@@ -39,6 +39,31 @@
   pointer-events: auto;
 }
 
+/* Mobile: bottom sheet — 90vh, slides up from bottom (THEMES-style filter UX) */
+@media (max-width: 900px) {
+  .drawer {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    height: 90vh;
+    max-height: 90vh;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+    transform: translateY(100%);
+  }
+
+  .drawerOpen {
+    transform: translateY(0);
+  }
+
+  .footer {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 .banner {
   flex-shrink: 0;
   display: flex;

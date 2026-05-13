@@ -7,6 +7,7 @@
   max-width: 1920px;
   margin: 0 auto;
   padding: 16px;
+  padding-top: 24px;
   background: #fff;
 }
 
@@ -18,6 +19,11 @@
   /* Six-tile (2×3) grid: vertically center title + description with the grid height */
   .banner[data-seo-layout="6"] {
     align-items: center;
+  }
+
+  /* ~two lines of body copy at desktop; mobile uses full .copy width for natural wraps */
+  .body {
+    max-width: 27.5rem;
   }
 }
 
