@@ -1,0 +1,120 @@
+.banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 16px;
+  background: #fff;
+}
+
+@media (min-width: 901px) {
+  .banner {
+    padding: 32px;
+  }
+
+  /* Six-tile (2×3) grid: vertically center title + description with the grid height */
+  .banner[data-seo-layout="6"] {
+    align-items: center;
+  }
+}
+
+.copy {
+  flex: 1;
+  min-width: 0;
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #1f1f1f;
+}
+
+.headline {
+  margin: 0;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 80px;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0;
+  font-feature-settings: "lnum", "pnum";
+}
+
+.body {
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 21px;
+  letter-spacing: 0;
+}
+
+.grid {
+  display: grid;
+  gap: 8px;
+  align-items: start;
+  width: max-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+@media (min-width: 901px) {
+  .grid {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+}
+
+.snapItem {
+  min-width: 0;
+  width: 100%;
+  justify-self: start;
+}
+
+@media (max-width: 900px) {
+  .banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Single-row horizontal carousel (2 / 4 / 6 tiles scroll in one row) */
+  .grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    align-self: stretch;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .snapItem {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+
+  .headline {
+    font-size: clamp(48px, 12vw, 80px);
+  }
+}
