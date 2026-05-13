@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import accountIcon from "../assets/images/account.svg";
-import menuIcon from "../assets/images/hamburger.svg";
-import searchIcon from "../assets/images/search.svg";
-import bagIcon from "../assets/images/shopping-bag.svg";
 import { FIGMA_MCP } from "../assets/figmaMcpAssets";
 import styles from "./SiteHeader.module.css";
+
+/** Root-absolute URLs so icons load on every route in production (stable vs bundled `/_next/static/media/…`). */
+const ICON_MENU = "/icons/hamburger.svg";
+const ICON_SEARCH = "/icons/search.svg";
+const ICON_ACCOUNT = "/icons/account.svg";
+const ICON_BAG = "/icons/shopping-bag.svg";
 
 const NAV_LINKS = [
   "Best Sellers",
@@ -57,10 +59,10 @@ export function SiteHeader() {
     <header className={headerClass} data-name="Header">
       <div className={styles.leadingMobile} data-name="Header MB leading">
         <button type="button" className={styles.iconBtn} aria-label="Open menu" aria-expanded="false">
-          <img className={styles.headerIcon} src={menuIcon} alt="" width={24} height={24} />
+          <img className={styles.headerIcon} src={ICON_MENU} alt="" width={24} height={24} />
         </button>
         <button type="button" className={styles.iconBtn} aria-label="Search">
-          <img className={styles.headerIcon} src={searchIcon} alt="" width={24} height={24} />
+          <img className={styles.headerIcon} src={ICON_SEARCH} alt="" width={24} height={24} />
         </button>
       </div>
       <Link className={styles.logo} href="/" aria-label="Home">
@@ -96,13 +98,13 @@ export function SiteHeader() {
           className={`${styles.iconBtn} ${styles.searchDesktop}`}
           aria-label="Search"
         >
-          <img className={styles.headerIcon} src={searchIcon} alt="" width={24} height={24} />
+          <img className={styles.headerIcon} src={ICON_SEARCH} alt="" width={24} height={24} />
         </button>
         <button type="button" className={styles.iconBtn} aria-label="Account">
-          <img className={styles.headerIcon} src={accountIcon} alt="" width={24} height={24} />
+          <img className={styles.headerIcon} src={ICON_ACCOUNT} alt="" width={24} height={24} />
         </button>
         <button type="button" className={styles.iconBtn} aria-label="Shopping bag">
-          <img className={styles.headerIcon} src={bagIcon} alt="" width={24} height={24} />
+          <img className={styles.headerIcon} src={ICON_BAG} alt="" width={24} height={24} />
         </button>
       </div>
     </header>
