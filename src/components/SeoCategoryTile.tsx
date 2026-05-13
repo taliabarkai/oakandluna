@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./SeoCategoryTile.module.css";
 
 export type SeoCategoryTileProps = {

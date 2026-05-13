@@ -1,5 +1,7 @@
+"use client";
+
 import { useLayoutEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
 import { PROMO_BANNER_ID } from "./ToplinePromoBanner";
 import styles from "./Topline.module.css";
 
@@ -9,7 +11,7 @@ export type ToplineProps = {
 };
 
 export function Topline({ promoOpen, onPromoOpenChange }: ToplineProps) {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const isHome = pathname === "/";
   const announcementRef = useRef<HTMLDivElement>(null);
 

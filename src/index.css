@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Akatab:wght@600&family=Bebas+Neue&display=swap");
+
 *,
 *::before,
 *::after {
@@ -13,7 +15,7 @@ body {
 :root {
   /* Black announcement row height (not sticky); matches Topline.module.css min-heights */
   --announcement-bar-height: 40px;
-  /* Measured height of PLP sticky block (promo + header); set in App.tsx */
+  /* Measured height of PLP sticky block (promo + header); set in AppChrome.tsx */
   --sticky-nav-stack-height: 69px;
   --header-clearance: 56px;
   /* Sticky toolbar on PLP: sits below Topline + SiteHeader (see SiteHeader.module.css breakpoints) */

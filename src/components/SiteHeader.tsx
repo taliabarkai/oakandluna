@@ -1,5 +1,8 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import accountIcon from "../assets/images/account.svg";
 import menuIcon from "../assets/images/hamburger.svg";
 import searchIcon from "../assets/images/search.svg";
@@ -21,7 +24,7 @@ const NAV_LINKS = [
 const SCROLL_SOLID_PX = 8;
 
 export function SiteHeader() {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const isHome = pathname === "/";
 
   const [scrolled, setScrolled] = useState(false);
@@ -60,7 +63,7 @@ export function SiteHeader() {
           <img className={styles.headerIcon} src={searchIcon} alt="" width={24} height={24} />
         </button>
       </div>
-      <Link className={styles.logo} to="/" aria-label="Home">
+      <Link className={styles.logo} href="/" aria-label="Home">
         <img src={FIGMA_MCP.header.logo} alt="" width={145} height={37} />
       </Link>
       <nav
@@ -73,13 +76,13 @@ export function SiteHeader() {
       >
         {NAV_LINKS.map((label) =>
           label === "Necklaces" ? (
-            <NavLink
+            <Link
               key={label}
-              className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
-              to="/category"
+              href="/category"
+              className={`${styles.navLink} ${pathname === "/category" ? styles.navLinkActive : ""}`}
             >
               {label}
-            </NavLink>
+            </Link>
           ) : (
             <a key={label} className={styles.navLink} href="#">
               {label}

@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./SiteFooter.module.css";
 
 const CARE_LINKS = [
