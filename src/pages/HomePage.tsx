@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import heroDesktop from "../assets/images/hero-desktop.jpg";
-import heroMobile from "../assets/images/hero-mobile.jpg";
+import heroDesktop from "../assets/images/home-hero-desktop.jpg";
+import heroMobile from "../assets/images/home-hero-mobile.jpg";
 import styles from "./HomePage.module.css";
 
 export function HomePage() {
