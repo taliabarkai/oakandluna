@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import { CategoryToolbar } from "./CategoryToolbar";
+import { FilterSortPanel } from "./FilterSortPanel";
 import styles from "./CategoryPageLayout.module.css";
 import {
   ProductCard,
@@ -203,10 +207,23 @@ const EDITORIAL_FEATURE_IMAGE =
 const LOOKBOOK_FEATURE_IMAGE =
   "https://cdn.oakandluna.com/digital-asset/banners/oal-Birthstones-box1.jpg";
 
+const FILTERS_PANEL_ID = "filters-sort-panel";
+
 export function CategoryPageLayout() {
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
   return (
     <section className={styles.section} data-name="Category">
-      <CategoryToolbar />
+      <CategoryToolbar
+        filtersOpen={filtersOpen}
+        filtersPanelId={FILTERS_PANEL_ID}
+        onOpenFilters={() => setFiltersOpen((v) => !v)}
+      />
+      <FilterSortPanel
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        panelId={FILTERS_PANEL_ID}
+      />
       <div className={styles.heroGrid}>
         <ProductCard {...demoForIndex(0)} />
         <ProductCard {...demoForIndex(1)} />

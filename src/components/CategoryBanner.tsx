@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { CATEGORY_BANNER_SEO_IMAGES } from "../assets/categoryBannerSeoImages";
 import type { SeoBannerCardCount } from "../seoBannerLayout";
@@ -77,18 +77,10 @@ function buildSeoSlots(
   }));
 }
 
-/** Match `SeoCategoryTile` fixed image width so columns never squeeze tiles smaller. */
-const SEO_TILE_PX = 150;
-
-function gridStyleForMode(mode: SeoBannerCardCount): CSSProperties {
-  if (mode === 6) {
-    return {
-      gridTemplateColumns: `repeat(3, ${SEO_TILE_PX}px)`,
-    };
-  }
-  return {
-    gridTemplateColumns: `repeat(${mode}, ${SEO_TILE_PX}px)`,
-  };
+function gridColsClass(mode: SeoBannerCardCount): string {
+  if (mode === 6) return styles.gridCols6;
+  if (mode === 4) return styles.gridCols4;
+  return styles.gridCols2;
 }
 
 export function CategoryBanner({
@@ -115,8 +107,7 @@ export function CategoryBanner({
         </p>
       </div>
       <div
-        className={styles.grid}
-        style={gridStyleForMode(seoDisplay)}
+        className={`${styles.grid} ${gridColsClass(seoDisplay)}`}
         data-node-id="91:4983"
         data-name="SEO Categories"
         role="toolbar"

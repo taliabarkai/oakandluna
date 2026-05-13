@@ -64,6 +64,18 @@
   overscroll-behavior-x: contain;
 }
 
+.gridCols2 {
+  grid-template-columns: repeat(2, 150px);
+}
+
+.gridCols4 {
+  grid-template-columns: repeat(4, 150px);
+}
+
+.gridCols6 {
+  grid-template-columns: repeat(3, 150px);
+}
+
 @media (min-width: 901px) {
   .grid {
     flex: 0 0 auto;
@@ -83,7 +95,8 @@
     align-items: flex-start;
   }
 
-  /* Single-row horizontal carousel (2 / 4 / 6 tiles scroll in one row) */
+  /* Single-row horizontal carousel (2 / 4 / 6 tiles scroll in one row).
+     Bleed past the banner's right padding so tiles reach the screen edge and the next card peeks in. */
   .grid {
     display: flex;
     flex-direction: row;
@@ -91,10 +104,10 @@
     align-items: flex-start;
     justify-content: flex-start;
     gap: 8px;
-    width: 100%;
-    max-width: 100%;
+    width: calc(100% + 16px);
+    max-width: none;
     margin-left: 0;
-    margin-right: 0;
+    margin-right: -16px;
     padding-left: 0;
     padding-right: 0;
     align-self: stretch;
