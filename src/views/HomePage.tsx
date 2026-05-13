@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import heroDesktop from "../assets/images/home-hero-desktop.jpg";
 import heroMobile from "../assets/images/home-hero-mobile.jpg";
 import styles from "./HomePage.module.css";
@@ -8,15 +8,15 @@ export function HomePage() {
     <>
       <section className={styles.hero} aria-label="Featured">
         <Link
-          to="/category"
+          href="/category"
           className={styles.heroCard}
           aria-label="Shop Hot Days Hot Icons"
         >
           <picture className={styles.heroPicture}>
-            <source media="(max-width: 767px)" srcSet={heroMobile} />
+            <source media="(max-width: 767px)" srcSet={heroMobile.src} />
             <img
               className={styles.heroMedia}
-              src={heroDesktop}
+              src={heroDesktop.src}
               alt=""
               sizes="100vw"
               loading="eager"
