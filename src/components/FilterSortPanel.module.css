@@ -39,7 +39,7 @@
   pointer-events: auto;
 }
 
-/* Mobile: bottom sheet — 90vh, slides up from bottom (THEMES-style filter UX) */
+/* Mobile: bottom sheet — cap height with dvh/svh + safe areas (iOS avoids vh overflow / top crop) */
 @media (max-width: 900px) {
   .drawer {
     top: auto;
@@ -48,8 +48,12 @@
     bottom: 0;
     width: 100%;
     max-width: none;
-    height: 90vh;
-    max-height: 90vh;
+    height: auto;
+    min-height: 0;
+    /* Legacy: 85vh is slightly conservative when dvh/calc unsupported */
+    max-height: 85vh;
+    /* ~90% of visible viewport minus notch + home indicator (iPhone Safari) */
+    max-height: calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 0.9);
     border-radius: 12px 12px 0 0;
     box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
     transform: translateY(100%);
