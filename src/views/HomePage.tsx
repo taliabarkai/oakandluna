@@ -1,12 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useHomeHeroTheme } from "@/context/HomeHeroThemeContext";
 import heroDesktop from "../assets/images/home-hero-desktop.jpg";
 import heroMobile from "../assets/images/home-hero-mobile.jpg";
 import styles from "./HomePage.module.css";
 
 export function HomePage() {
+  const { theme } = useHomeHeroTheme();
+  const heroClass = theme === "dark" ? `${styles.hero} ${styles.heroDark}` : styles.hero;
+
   return (
     <>
-      <section className={styles.hero} aria-label="Featured">
+      <section className={heroClass} aria-label="Featured">
         <Link
           href="/category"
           className={styles.heroCard}

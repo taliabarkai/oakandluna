@@ -4,7 +4,7 @@
   background-color: #000000;
 }
 
-.announcementBtn {
+.announcementRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -14,36 +14,59 @@
   padding: 8px 32px;
   min-height: 40px;
   box-sizing: border-box;
+}
+
+.announcementMain {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
   border: none;
   background: transparent;
   color: #fff;
   font: inherit;
   cursor: pointer;
   text-align: left;
+  padding: 0;
 }
 
-.announcementBtn:hover {
+.announcementMain:hover {
   opacity: 0.92;
 }
 
-.announcementBtn:focus {
+.announcementMain:focus {
   outline: none;
 }
 
-.announcementBtn:focus-visible {
+.announcementMain:focus-visible {
   outline: 2px solid #fff;
-  outline-offset: -2px;
+  outline-offset: 2px;
 }
 
-.left,
-.right {
+.announcementAside {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+  margin-left: 16px;
+  color: #fff;
+}
+
+.trackStack {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  line-height: 1.15;
+}
+
+.left {
   display: flex;
   align-items: center;
   gap: 24px;
-}
-
-.right {
-  justify-content: flex-end;
 }
 
 .center {
@@ -61,16 +84,6 @@
   line-height: 18px;
   letter-spacing: 0.5px;
   white-space: nowrap;
-}
-
-.trackHelp {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.trackHelpPipe {
-  flex-shrink: 0;
 }
 
 .textMedium {
@@ -118,19 +131,53 @@
 }
 
 @media (max-width: 767px) {
-  .announcementBtn {
-    justify-content: center;
-    padding: 10px 16px;
-    min-height: 36px;
+  .announcementRow {
+    position: relative;
+    display: block;
+    padding: 10px 12px;
+    min-height: 40px;
+    box-sizing: border-box;
+    overflow: visible;
   }
 
-  .left,
-  .right {
+  .announcementMain {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    min-height: 32px;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .left {
+    display: none;
+  }
+
+  /* Floats above the bar so it does not consume flex/grid space from the promo row */
+  .announcementAside {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    pointer-events: auto;
+    flex-shrink: 0;
+  }
+
+  .trackStack {
     display: none;
   }
 
   .center {
     flex: 0 1 auto;
+    min-width: 0;
+    max-width: calc(100% - clamp(44px, 14vw, 56px));
+    text-align: center;
   }
 
   .textMedium {

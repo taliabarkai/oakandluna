@@ -39,6 +39,21 @@
   box-shadow: none;
 }
 
+/* Homepage only: when header is transparent + hero “dark” mode (see HomeHeroThemeContext). */
+.headerTransparentDark .navLink,
+.headerTransparentDark .navLinkActive {
+  color: #fff;
+}
+
+.headerTransparentDark .navLink:hover {
+  opacity: 0.85;
+}
+
+.headerTransparentDark .logo img,
+.headerTransparentDark .headerIcon {
+  filter: brightness(0) invert(1);
+}
+
 /* Hamburger + search: visible below 1200px viewport */
 .leadingMobile {
   display: none;

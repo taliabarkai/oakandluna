@@ -32,10 +32,21 @@
   vertical-align: top;
 }
 
+/* Dark hero mode: subtle scrim over photo so white type stays legible */
+.heroDark .heroCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
 /* Live type over hero (THEMES hero — image may be text-free) */
 .heroOverlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -71,6 +82,19 @@
   text-transform: uppercase;
   color: #000;
   pointer-events: none;
+}
+
+.heroDark .heroHeadline,
+.heroDark .heroCta {
+  color: #fff;
+}
+
+.heroDark .heroCta {
+  border-bottom-color: #fff;
+}
+
+.heroDark .heroCard:focus-visible {
+  outline-color: #fff;
 }
 
 @media (min-width: 901px) {

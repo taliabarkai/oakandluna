@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useHomeHeroTheme } from "@/context/HomeHeroThemeContext";
 import { FIGMA_MCP } from "../assets/figmaMcpAssets";
 import styles from "./SiteHeader.module.css";
 
@@ -28,11 +29,13 @@ const SCROLL_SOLID_PX = 8;
 export function SiteHeader() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const { theme } = useHomeHeroTheme();
 
   const [scrolled, setScrolled] = useState(false);
   const [navHovered, setNavHovered] = useState(false);
 
   const solid = !isHome || scrolled || navHovered;
+  const transparentHeroDark = isHome && !solid && theme === "dark";
 
   useEffect(() => {
     setScrolled(false);
@@ -53,7 +56,10 @@ export function SiteHeader() {
     styles.header,
     isHome ? styles.headerFixed : styles.headerInNavStack,
     solid ? styles.headerSolid : isHome ? styles.headerTransparent : styles.headerSolid,
-  ].join(" ");
+    transparentHeroDark ? styles.headerTransparentDark : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <header className={headerClass} data-name="Header">

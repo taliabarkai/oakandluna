@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { HeroThemeToggle } from "./HeroThemeToggle";
 import { PROMO_BANNER_ID } from "./ToplinePromoBanner";
 import styles from "./Topline.module.css";
 
@@ -55,31 +56,31 @@ export function Topline({ promoOpen, onPromoOpenChange }: ToplineProps) {
 
   return (
     <div ref={announcementRef} className={styles.announcementShell}>
-      <button
-        type="button"
-        className={styles.announcementBtn}
-        data-name="Announcement"
-        aria-label="Toggle promotional banner"
-        aria-expanded={promoOpen}
-        aria-controls={promoOpen ? PROMO_BANNER_ID : undefined}
-        onClick={() => onPromoOpenChange(!promoOpen)}
-      >
-        <div className={styles.left} data-name="Subscribe">
-          <p className={styles.textLight}>Subscribe &amp; Get 10% Off</p>
+      <div className={styles.announcementRow}>
+        <button
+          type="button"
+          className={styles.announcementMain}
+          data-name="Announcement"
+          aria-label="Toggle promotional banner"
+          aria-expanded={promoOpen}
+          aria-controls={promoOpen ? PROMO_BANNER_ID : undefined}
+          onClick={() => onPromoOpenChange(!promoOpen)}
+        >
+          <div className={styles.left} data-name="Subscribe">
+            <p className={styles.textLight}>Subscribe &amp; Get 10% Off</p>
+          </div>
+          <div className={styles.center}>
+            <p className={styles.textMedium}>Free Shipping on All Orders</p>
+          </div>
+        </button>
+        <div className={styles.announcementAside} data-name="Track & Help">
+          <div className={styles.trackStack}>
+            <p className={styles.textLight}>Help</p>
+            <p className={styles.textLight}>Track my order</p>
+          </div>
+          {isHome ? <HeroThemeToggle /> : null}
         </div>
-        <div className={styles.center}>
-          <p className={styles.textMedium}>Free Shipping on All Orders</p>
-        </div>
-        <div className={styles.right} data-name="Track & Help">
-          <p className={`${styles.textLight} ${styles.trackHelp}`}>
-            <span>Help</span>
-            <span className={styles.trackHelpPipe} aria-hidden>
-              |
-            </span>
-            <span>Track my order</span>
-          </p>
-        </div>
-      </button>
+      </div>
     </div>
   );
 }

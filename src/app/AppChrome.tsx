@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Topline } from "@/components/Topline";
 import { ToplinePromoBanner } from "@/components/ToplinePromoBanner";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
+import { HomeHeroThemeProvider } from "@/context/HomeHeroThemeContext";
 import styles from "./AppChrome.module.css";
 
 export function AppChrome({ children }: { children: ReactNode }) {
@@ -54,27 +55,29 @@ export function AppChrome({ children }: { children: ReactNode }) {
   }, [isHome, promoOpen]);
 
   return (
-    <div className={styles.page}>
-      <Topline promoOpen={promoOpen} onPromoOpenChange={setPromoOpen} />
-      {isHome ? (
-        <>
-          {promoOpen ? (
-            <div className={styles.promoStickyHome}>
-              <ToplinePromoBanner />
-            </div>
-          ) : null}
-          <SiteHeader />
-        </>
-      ) : (
-        <div ref={stickyNavRef} className={styles.stickyNavStack}>
-          {promoOpen ? <ToplinePromoBanner /> : null}
-          <SiteHeader />
-        </div>
-      )}
-      <main className={isHome ? styles.mainHome : styles.mainDefault}>
-        <RouteErrorBoundary>{children}</RouteErrorBoundary>
-      </main>
-      <SiteFooter />
-    </div>
+    <HomeHeroThemeProvider>
+      <div className={styles.page}>
+        <Topline promoOpen={promoOpen} onPromoOpenChange={setPromoOpen} />
+        {isHome ? (
+          <>
+            {promoOpen ? (
+              <div className={styles.promoStickyHome}>
+                <ToplinePromoBanner />
+              </div>
+            ) : null}
+            <SiteHeader />
+          </>
+        ) : (
+          <div ref={stickyNavRef} className={styles.stickyNavStack}>
+            {promoOpen ? <ToplinePromoBanner /> : null}
+            <SiteHeader />
+          </div>
+        )}
+        <main className={isHome ? styles.mainHome : styles.mainDefault}>
+          <RouteErrorBoundary>{children}</RouteErrorBoundary>
+        </main>
+        <SiteFooter />
+      </div>
+    </HomeHeroThemeProvider>
   );
 }
