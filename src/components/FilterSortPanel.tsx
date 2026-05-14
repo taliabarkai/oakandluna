@@ -3,12 +3,15 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import styles from "./FilterSortPanel.module.css";
 
-export type SortKey = "featured" | "priceAsc" | "priceDesc";
+export type SortKey = "featured" | "whatsNew" | "priceAsc" | "priceDesc";
+
+export type DesktopFilterSlideVariant = "top" | "left" | "right";
 
 const SORT_OPTIONS: { key: SortKey; label: string }[] = [
   { key: "featured", label: "Featured" },
-  { key: "priceAsc", label: "Price: Low to high" },
-  { key: "priceDesc", label: "Price: High to low" },
+  { key: "whatsNew", label: "What's New" },
+  { key: "priceAsc", label: "Price low to high" },
+  { key: "priceDesc", label: "Price high to low" },
 ];
 
 /** Materials row — swatch colors aligned with THEMES Filters Panel (9605:93804). */
@@ -38,29 +41,96 @@ const MATERIAL_OPTIONS: { id: string; label: string; swatch: string; ring?: bool
   { id: "pearls", label: "Pearls", swatch: "linear-gradient(145deg, #f5f0e8 0%, #e0d8ce 100%)", ring: true },
 ];
 
+export type InscriptionCountKey = "1" | "2" | "3" | "4" | "5plus";
+
+const INSCRIPTION_OPTIONS: { key: InscriptionCountKey; label: string }[] = [
+  { key: "1", label: "1 inscription" },
+  { key: "2", label: "2 inscriptions" },
+  { key: "3", label: "3 inscriptions" },
+  { key: "4", label: "4 inscriptions" },
+  { key: "5plus", label: "5 and more inscriptions" },
+];
+
+function TrailingSelectionCheck({ className }: { className: string }) {
+  return (
+    <svg
+      className={className}
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <circle cx="12" cy="12" r="7.4" stroke="currentColor" strokeWidth="1.2" />
+      <path
+        d="M15.6384 9.83027C15.3455 9.53737 14.8707 9.53737 14.5778 9.83027L11.3613 13.0467L9.79132 11.4767C9.49842 11.1838 9.02355 11.1838 8.73066 11.4767C8.43776 11.7696 8.43776 12.2445 8.73066 12.5374L10.8114 14.6182C10.8598 14.6665 10.9131 14.7069 10.9697 14.7392C11.2591 14.9199 11.645 14.8844 11.8966 14.6328L15.6384 10.8909C15.9313 10.598 15.9313 10.1232 15.6384 9.83027Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export type FilterSortPanelProps = {
   open: boolean;
   onClose: () => void;
   /** Matches `aria-controls` on the toolbar Filter button. */
   panelId?: string;
+  /** Total sellable SKU count on the PLP (demo). */
+  totalProductCount: number;
+  /** Count after applying current filter UI (demo heuristic). */
+  filteredProductCount: number;
+  sort: SortKey;
+  onSortChange: (key: SortKey) => void;
+  materials: ReadonlySet<string>;
+  onToggleMaterial: (id: string) => void;
+  /** `null` = no inscription filter (nothing selected). */
+  inscriptionCount: InscriptionCountKey | null;
+  /** Same toggle semantics as materials: click selects; click again clears. */
+  onToggleInscription: (key: InscriptionCountKey) => void;
+  /** Desktop-only (≥901px): how the panel enters the viewport (`top` | `left` | `right`). Mobile unchanged. */
+  desktopFilterSlide?: DesktopFilterSlideVariant;
 };
 
-export function FilterSortPanel({ open, onClose, panelId = "filters-sort-panel" }: FilterSortPanelProps) {
+export function FilterSortPanel({
+  open,
+  onClose,
+  panelId = "filters-sort-panel",
+  totalProductCount,
+  filteredProductCount,
+  sort,
+  onSortChange,
+  materials,
+  onToggleMaterial,
+  inscriptionCount,
+  onToggleInscription,
+  desktopFilterSlide = "top",
+}: FilterSortPanelProps) {
   const titleId = useId();
+  const sortListId = useId();
+  const materialsListId = useId();
+  const inscriptionsListId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
-  const [sort, setSort] = useState<SortKey>("featured");
-  const [materials, setMaterials] = useState<Set<string>>(() => new Set());
+
+  const [mobileSortOpen, setMobileSortOpen] = useState(false);
+  const [mobileMaterialsOpen, setMobileMaterialsOpen] = useState(false);
+  const [mobileInscriptionsOpen, setMobileInscriptionsOpen] = useState(false);
 
   const sortLabel = SORT_OPTIONS.find((o) => o.key === sort)?.label ?? "Featured";
 
-  const toggleMaterial = useCallback((id: string) => {
-    setMaterials((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }, []);
+  const toggleMaterial = useCallback(
+    (id: string) => {
+      onToggleMaterial(id);
+    },
+    [onToggleMaterial],
+  );
+
+  const toggleInscription = useCallback(
+    (key: InscriptionCountKey) => {
+      onToggleInscription(key);
+    },
+    [onToggleInscription],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -86,6 +156,25 @@ export function FilterSortPanel({ open, onClose, panelId = "filters-sort-panel" 
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  useEffect(() => {
+    if (!open) {
+      setMobileSortOpen(false);
+      setMobileMaterialsOpen(false);
+      setMobileInscriptionsOpen(false);
+      return;
+    }
+
+    const isMobileLayout = window.matchMedia("(max-width: 900px)").matches;
+    const isSideSlide = desktopFilterSlide === "left" || desktopFilterSlide === "right";
+    if (isMobileLayout || isSideSlide) {
+      setMobileSortOpen(true);
+    } else {
+      setMobileSortOpen(false);
+    }
+  }, [open, desktopFilterSlide]);
+
+  const ctaLabel = `View ${filteredProductCount} items`;
+
   return (
     <>
       <button
@@ -98,7 +187,13 @@ export function FilterSortPanel({ open, onClose, panelId = "filters-sort-panel" 
       />
       <div
         id={panelId}
-        className={`${styles.drawer} ${open ? styles.drawerOpen : ""}`}
+        className={`${styles.drawer} ${open ? styles.drawerOpen : ""} ${
+          desktopFilterSlide === "left"
+            ? styles.drawerDesktopSlideLeft
+            : desktopFilterSlide === "right"
+              ? styles.drawerDesktopSlideRight
+              : ""
+        }`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -106,7 +201,7 @@ export function FilterSortPanel({ open, onClose, panelId = "filters-sort-panel" 
       >
         <div className={styles.banner} data-name="Modal Banner DT">
           <p className={styles.bannerTitle} id={titleId}>
-            Filters
+            Filter + Sort
           </p>
           <button
             ref={closeRef}
@@ -127,76 +222,167 @@ export function FilterSortPanel({ open, onClose, panelId = "filters-sort-panel" 
         </div>
 
         <div className={styles.scroll}>
-          <div className={styles.sortBlock} data-name="OAL">
-            <div className={styles.sortRow} data-name="Filter Nav">
-              <div className={styles.sortRowInner}>
-                <span className={styles.sortLabel}>Sort By:</span>
-                <span className={styles.sortValue}>{sortLabel}</span>
-              </div>
-              <span className={styles.chevron} aria-hidden>
-                <svg className={styles.chevronSvg} viewBox="0 0 9 6" fill="none">
-                  <path d="M1 1.5L4.5 5L8 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                </svg>
-              </span>
-            </div>
+          <div className={styles.columns}>
+            <div className={`${styles.sortBlock} ${styles.filterColumn}`}>
+              <h2 className={`${styles.sectionTitle} ${styles.columnHeadingDesktop}`}>Sort by</h2>
+              <button
+                type="button"
+                className={styles.sortRow}
+                data-name="Filter Nav"
+                aria-expanded={mobileSortOpen}
+                aria-controls={sortListId}
+                onClick={() => setMobileSortOpen((v) => !v)}
+              >
+                <div className={styles.sortRowInner}>
+                  <span className={styles.sortLabel}>Sort By:</span>
+                  <span className={styles.sortValue}>{sortLabel}</span>
+                </div>
+                <span
+                  className={`${styles.chevron} ${mobileSortOpen ? styles.chevronExpanded : ""}`}
+                  aria-hidden
+                >
+                  <svg className={styles.chevronSvg} viewBox="0 0 9 6" fill="none">
+                    <path d="M1 1.5L4.5 5L8 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                </span>
+              </button>
 
-            <div className={styles.sortList} role="radiogroup" aria-label="Sort options">
-              {SORT_OPTIONS.map((opt) => {
-                const selected = sort === opt.key;
-                return (
-                  <button
-                    key={opt.key}
-                    type="button"
-                    className={styles.sortOption}
-                    role="radio"
-                    aria-checked={selected}
-                    onClick={() => setSort(opt.key)}
-                  >
-                    <span
-                      className={`${styles.radioOuter} ${selected ? styles.radioOuterSelected : ""}`}
-                      aria-hidden
+              <div
+                id={sortListId}
+                className={`${styles.sortList} ${!mobileSortOpen ? styles.filterBodyMobileCollapsed : ""}`}
+                role="radiogroup"
+                aria-label="Sort options"
+              >
+                {SORT_OPTIONS.map((opt) => {
+                  const selected = sort === opt.key;
+                  return (
+                    <button
+                      key={opt.key}
+                      type="button"
+                      className={styles.sortOption}
+                      role="radio"
+                      aria-checked={selected}
+                      onClick={() => onSortChange(opt.key)}
                     >
-                      {selected ? <span className={styles.radioInner} /> : null}
-                    </span>
-                    <span className={styles.sortOptionText}>{opt.label}</span>
-                  </button>
-                );
-              })}
+                      <span className={styles.sortOptionText}>{opt.label}</span>
+                      <span className={styles.trailingCheckSlot} aria-hidden>
+                        {selected ? <TrailingSelectionCheck className={styles.trailingCheckSvg} /> : null}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div className={styles.categories} data-name="categories">
-            <h2 className={styles.sectionTitle}>Materials</h2>
-            <div className={styles.materialList}>
-              {MATERIAL_OPTIONS.map((m) => {
-                const on = materials.has(m.id);
-                return (
-                  <button
-                    key={m.id}
-                    type="button"
-                    className={styles.materialRow}
-                    aria-pressed={on}
-                    onClick={() => toggleMaterial(m.id)}
-                  >
-                    <span
-                      className={`${styles.swatch} ${m.ring ? styles.swatchRing : ""} ${on ? styles.swatchOn : ""}`}
-                      style={
-                        m.swatch.startsWith("linear")
-                          ? { backgroundImage: m.swatch }
-                          : { backgroundColor: m.swatch }
-                      }
-                    />
-                    <span className={styles.materialLabel}>{m.label}</span>
-                  </button>
-                );
-              })}
+            <div className={`${styles.categories} ${styles.filterColumn}`}>
+              <h2 className={`${styles.sectionTitle} ${styles.columnHeadingDesktop}`}>Materials</h2>
+              <button
+                type="button"
+                className={styles.filterSectionDisclosure}
+                aria-expanded={mobileMaterialsOpen}
+                aria-controls={materialsListId}
+                onClick={() => setMobileMaterialsOpen((v) => !v)}
+              >
+                <span className={styles.filterSectionDisclosureLabel}>Materials</span>
+                <span
+                  className={`${styles.chevron} ${mobileMaterialsOpen ? styles.chevronExpanded : ""}`}
+                  aria-hidden
+                >
+                  <svg className={styles.chevronSvg} viewBox="0 0 9 6" fill="none">
+                    <path d="M1 1.5L4.5 5L8 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                </span>
+              </button>
+              <div
+                id={materialsListId}
+                className={`${styles.materialList} ${!mobileMaterialsOpen ? styles.filterBodyMobileCollapsed : ""}`}
+              >
+                {MATERIAL_OPTIONS.map((m) => {
+                  const on = materials.has(m.id);
+                  return (
+                    <button
+                      key={m.id}
+                      type="button"
+                      className={styles.materialRow}
+                      aria-pressed={on}
+                      onClick={() => toggleMaterial(m.id)}
+                    >
+                      <span className={styles.swatchFrame}>
+                        <span
+                          className={`${styles.swatch} ${m.ring ? styles.swatchRing : ""}`}
+                          style={
+                            m.swatch.startsWith("linear")
+                              ? { backgroundImage: m.swatch }
+                              : { backgroundColor: m.swatch }
+                          }
+                        />
+                      </span>
+                      <span className={styles.materialLabel}>{m.label}</span>
+                      <span className={styles.trailingCheckSlot} aria-hidden>
+                        {on ? <TrailingSelectionCheck className={styles.trailingCheckSvg} /> : null}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={`${styles.inscriptionBlock} ${styles.filterColumn}`}>
+              <h2 className={`${styles.sectionTitle} ${styles.columnHeadingDesktop}`}>
+                Number of inscriptions
+              </h2>
+              <button
+                type="button"
+                className={styles.filterSectionDisclosure}
+                aria-expanded={mobileInscriptionsOpen}
+                aria-controls={inscriptionsListId}
+                onClick={() => setMobileInscriptionsOpen((v) => !v)}
+              >
+                <span className={styles.filterSectionDisclosureLabel}>Number of inscriptions</span>
+                <span
+                  className={`${styles.chevron} ${mobileInscriptionsOpen ? styles.chevronExpanded : ""}`}
+                  aria-hidden
+                >
+                  <svg className={styles.chevronSvg} viewBox="0 0 9 6" fill="none">
+                    <path d="M1 1.5L4.5 5L8 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                </span>
+              </button>
+              <div
+                id={inscriptionsListId}
+                className={`${styles.inscriptionList} ${!mobileInscriptionsOpen ? styles.filterBodyMobileCollapsed : ""}`}
+              >
+                {INSCRIPTION_OPTIONS.map((opt) => {
+                  const selected = inscriptionCount === opt.key;
+                  return (
+                    <button
+                      key={opt.key}
+                      type="button"
+                      className={styles.inscriptionOption}
+                      aria-pressed={selected}
+                      onClick={() => toggleInscription(opt.key)}
+                    >
+                      <span className={styles.inscriptionOptionText}>{opt.label}</span>
+                      <span className={styles.trailingCheckSlot} aria-hidden>
+                        {selected ? <TrailingSelectionCheck className={styles.trailingCheckSvg} /> : null}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
 
         <div className={styles.footer}>
-          <button type="button" className={styles.viewBtn} data-name="Component 47" onClick={onClose}>
-            View items
+          <button
+            type="button"
+            className={styles.viewBtn}
+            data-name="Component 47"
+            onClick={onClose}
+            aria-label={`View ${filteredProductCount} items (${totalProductCount} total on page)`}
+          >
+            {ctaLabel}
           </button>
         </div>
       </div>

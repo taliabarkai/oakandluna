@@ -1,8 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { computeFilteredProductCount } from "@/categoryFilterModel";
+import { CATEGORY_PLP_PRODUCT_COUNT } from "@/categoryPlpConstants";
 import { CategoryToolbar } from "./CategoryToolbar";
-import { FilterSortPanel } from "./FilterSortPanel";
+import {
+  FilterSortPanel,
+  type DesktopFilterSlideVariant,
+  type InscriptionCountKey,
+  type SortKey,
+} from "./FilterSortPanel";
 import styles from "./CategoryPageLayout.module.css";
 import {
   ProductCard,
@@ -211,18 +218,53 @@ const FILTERS_PANEL_ID = "filters-sort-panel";
 
 export function CategoryPageLayout() {
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [desktopFilterSlide, setDesktopFilterSlide] = useState<DesktopFilterSlideVariant>("top");
+  const [sort, setSort] = useState<SortKey>("featured");
+  const [materials, setMaterials] = useState<Set<string>>(() => new Set());
+  const [inscriptionCount, setInscriptionCount] = useState<InscriptionCountKey | null>(null);
+
+  const filteredCount = useMemo(
+    () =>
+      computeFilteredProductCount(CATEGORY_PLP_PRODUCT_COUNT, sort, materials, inscriptionCount),
+    [sort, materials, inscriptionCount],
+  );
+
+  const toggleMaterial = useCallback((id: string) => {
+    setMaterials((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleInscription = useCallback((key: InscriptionCountKey) => {
+    setInscriptionCount((prev) => (prev === key ? null : key));
+  }, []);
 
   return (
     <section className={styles.section} data-name="Category">
       <CategoryToolbar
         filtersOpen={filtersOpen}
         filtersPanelId={FILTERS_PANEL_ID}
+        itemCountLabel={`${filteredCount} items`}
         onOpenFilters={() => setFiltersOpen((v) => !v)}
+        desktopFilterSlide={desktopFilterSlide}
+        onDesktopFilterSlideChange={setDesktopFilterSlide}
       />
       <FilterSortPanel
         open={filtersOpen}
         onClose={() => setFiltersOpen(false)}
         panelId={FILTERS_PANEL_ID}
+        totalProductCount={CATEGORY_PLP_PRODUCT_COUNT}
+        filteredProductCount={filteredCount}
+        sort={sort}
+        onSortChange={setSort}
+        materials={materials}
+        onToggleMaterial={toggleMaterial}
+        inscriptionCount={inscriptionCount}
+        onToggleInscription={toggleInscription}
+        desktopFilterSlide={desktopFilterSlide}
       />
       <div className={styles.heroGrid}>
         <ProductCard {...demoForIndex(0)} />
