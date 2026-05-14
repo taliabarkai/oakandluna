@@ -5,12 +5,78 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   width: 100%;
   max-width: 1920px;
   margin: 0 auto;
   padding: 16px;
   background: #fff;
   box-sizing: border-box;
+}
+
+.barStart {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.desktopSlideDemo {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 901px) {
+  .desktopSlideDemo {
+    display: flex;
+  }
+}
+
+.desktopSlideDemoLabel {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #666;
+  white-space: nowrap;
+}
+
+.desktopSlideDemoPills {
+  display: flex;
+  gap: 4px;
+}
+
+.desktopSlidePill {
+  padding: 6px 12px;
+  border: 1px solid #c4c4c4;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #1f1f1f;
+}
+
+.desktopSlidePill:hover {
+  opacity: 0.85;
+}
+
+.desktopSlidePill[aria-pressed="true"] {
+  background: #1f1f1f;
+  border-color: #1f1f1f;
+  color: #fff;
+}
+
+.desktopSlidePill:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
 }
 
 .filterBtn {
